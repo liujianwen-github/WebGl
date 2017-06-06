@@ -16,6 +16,7 @@
 <body>
 <div id="canvas-frame"></div>
 <script src="lib/three.js" type="text/javascript" charset="utf-8"></script>
+<script src="lib/stats.js"></script>
 <script>
 
 //    webgl中动画的思路
@@ -35,7 +36,15 @@
         renderer.setSize(width,height);
         document.getElementById("canvas-frame").appendChild(renderer.domElement);
         renderer.setClearColor(0xFFFFFF, 1.0);//背景颜色
+
+        stats = new Stats();
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.left = '0px';
+        stats.domElement.style.top = '0px';
+        document.getElementById('canvas-frame').appendChild(stats.domElement);
+//        一般情况下，帧数都可以跑到60，不到的话就要检查代码了
     };
+
     //            场景
     const initScene=(e)=>{
         scene=new THREE.Scene();
@@ -93,6 +102,8 @@
         renderer.render(scene, camera);
         requestAnimationFrame(animation);//回调函数，继续调用animation这个函数
 
+        stats.update()
+
     };
 
 
@@ -105,7 +116,9 @@
         animation();
 //        renderer.render(scene, camera);
     };
-    main()
+    main();
+
+
 </script>
 </body>
 </html>
