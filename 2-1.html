@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2-1自制一个方格</title>
+    <style type="text/css">
+        div#canvas-frame {
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            height: 600px;
+            background-color: #EEEEEE;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-frame"></div>
+    <script src="lib/three.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        let renderer;
+        let scene;
+        let camera;
+        let light;
+        //            渲染器
+        const initThree=(e)=>{
+            width=window.innerWidth;
+            height=window.innerHeight;
+            renderer=new THREE.WebGLRenderer();
+            renderer.setSize(width,height);
+            document.getElementById("canvas-frame").appendChild(renderer.domElement)
+        };
+        //            场景
+        const initScene=(e)=>{
+            scene=new THREE.Scene();
+        };
+        //            相机
+        const initCamera=(e)=>{
+            camera=new THREE.PerspectiveCamera(45, width / height, 1, 10000);
+//            相机视角
+            camera.position.x = 0;
+            camera.position.y = 5000;
+            camera.position.z = 0;
+            camera.up.x = 0;
+            camera.up.y = 0;
+            camera.up.z = 1;
+            camera.lookAt({
+                x : 0,
+                y : 0,
+                z : 0
+            });
+        };
+
+
+        //			const initLight=(e)=>{
+        //                light = new THREE.DirectionalLight(0xFF0000, 1.0, 0);
+        //                light.position.set(100, 100, 200);
+        //                scene.add(light);
+        //            };
+
+        const initObj=(e)=>{
+
+            for (let i=0; i<=20; i++){
+                //这里划了21条线
+                let geometry=new THREE.Geometry();
+                let material=new THREE.LineBasicMaterial({vertexColors: true});//定义线条的材质
+                let color1 = new THREE.Color( 0x444444 ), color2 = new THREE.Color( 0xFF0000 );
+                let p1=new THREE.Vector3(0,0,0);
+                let p2=new THREE.Vector3(2000,0,0);
+                geometry.vertices.push(p1);
+                geometry.vertices.push(p2);
+                geometry.colors.push(color1,color2);
+                let line1=new THREE.Line(geometry,material,THREE.LineSegments);
+                //参数说明：①几何体,包含两个顶点和颜色②线条属性③一组点的连接方式
+//                line.position.x=100*i;
+                line1.position.z=100*i;
+                scene.add(line1);
+                let line2=new THREE.Line(geometry,material,THREE.LineSegments);
+                line2.rotation.y=-90 * Math.PI / 180;
+                line2.position.x=100*i;
+                scene.add(line2);
+            }
+        };
+
+        const main=(e)=>{
+            initThree();
+            initCamera();
+            initScene();
+//                initLight();
+            initObj();
+            renderer.render(scene, camera);
+        };
+        main()
+    </script>
+</body>
+</html>
